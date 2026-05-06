@@ -1,4 +1,4 @@
-# Project Refactoring Walkthrough
+# Project Walkthrough
 
 I have successfully refactored the "Lớp học số" project into a structured `client` (Frontend) and `server` (Backend) setup.
 
