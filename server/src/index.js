@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const env = require('./config/env');
 const authRoutes = require('./routes/auth.routes');
 const courseRoutes = require('./routes/course.routes');
+const teacherRoutes = require('./routes/teacher.routes');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/teachers', teacherRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

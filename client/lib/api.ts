@@ -105,6 +105,47 @@ export type CourseResponse = {
   };
 };
 
+export type TeacherPayload = {
+  name: string;
+  subject: string;
+  achievements: string[];
+  image: string;
+  description: string;
+  quote: string;
+  experience: string;
+  courseIds: number[];
+};
+
+export type ApiTeacher = {
+  id: number;
+  name: string;
+  subject: string;
+  achievements: string[];
+  image: string;
+  description: string;
+  quote: string;
+  experience: string;
+  courses: ApiCourse[];
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+export type TeachersResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    teachers: ApiTeacher[];
+  };
+};
+
+export type TeacherResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    teacher: ApiTeacher;
+  };
+};
+
 export const authApi = {
   signup(payload: {
     name: string;
@@ -166,6 +207,39 @@ export const coursesApi = {
 
   delete(id: number, token?: string | null) {
     return apiRequest<BasicResponse>(`/api/courses/${id}`, {
+      method: "DELETE",
+      token,
+    });
+  },
+};
+
+export const teachersApi = {
+  list() {
+    return apiRequest<TeachersResponse>("/api/teachers");
+  },
+
+  detail(id: number) {
+    return apiRequest<TeacherResponse>(`/api/teachers/${id}`);
+  },
+
+  create(payload: TeacherPayload, token?: string | null) {
+    return apiRequest<TeacherResponse>("/api/teachers", {
+      method: "POST",
+      body: payload,
+      token,
+    });
+  },
+
+  update(id: number, payload: Partial<TeacherPayload>, token?: string | null) {
+    return apiRequest<TeacherResponse>(`/api/teachers/${id}`, {
+      method: "PATCH",
+      body: payload,
+      token,
+    });
+  },
+
+  delete(id: number, token?: string | null) {
+    return apiRequest<BasicResponse>(`/api/teachers/${id}`, {
       method: "DELETE",
       token,
     });

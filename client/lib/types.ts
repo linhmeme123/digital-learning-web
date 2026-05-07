@@ -20,6 +20,7 @@ export interface Teacher {
   description: string;
   quote: string;
   experience: string;
+  courses?: Course[];
 }
 
 export interface Course {
