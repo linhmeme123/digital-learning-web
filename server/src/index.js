@@ -1,26 +1,40 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+const cookieParser = require('cookie-parser');
+
+const env = require('./config/env');
+const authRoutes = require('./routes/auth.routes');
+const courseRoutes = require('./routes/course.routes');
 
 const app = express();
-const PORT = process.env.PORT || 4000;
 
-// Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: env.clientUrl,
+    credentials: true,
+  })
+);
+
 app.use(express.json());
+app.use(cookieParser());
 
-// Routes
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Lớp học số API' });
+  res.json({
+    success: true,
+    message: 'Welcome to Lớp học số API',
+  });
 });
 
-// Demo API for login/testing
-app.post('/api/login', (req, res) => {
-  const { email, password } = req.body;
-  // Placeholder logic
-  res.json({ success: true, message: 'Login successful (Mock)' });
+app.use('/api/auth', authRoutes);
+app.use('/api/courses', courseRoutes);
+
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'API route not found',
+  });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(env.port, () => {
+  console.log(`Server is running on http://localhost:${env.port}`);
 });

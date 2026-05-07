@@ -3,19 +3,19 @@ import { CarouselItem, Achievement, Teacher, Course } from './types';
 export const carouselItems: CarouselItem[] = [
   {
     id: 1,
-    title: 'Lập Trình Web',
+    title: 'Môn Toán',
     description: 'Khóa học lập trình web toàn diện từ cơ bản đến nâng cao',
     image: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   },
   {
     id: 2,
-    title: 'Python cho Người Mới',
+    title: 'Môn Vật Lý',
     description: 'Bắt đầu hành trình lập trình với Python - ngôn ngữ dễ học nhất',
     image: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
   },
   {
     id: 3,
-    title: 'Mobile Development',
+    title: 'Môn Hoá Học',
     description: 'Phát triển ứng dụng di động với React Native và Flutter',
     image: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
   },
@@ -25,7 +25,7 @@ export const achievements: Achievement[] = [
   {
     icon: '🎓',
     title: '5 năm kinh nghiệm',
-    description: 'Giảng dạy liên tục trong ngành công nghệ thông tin',
+    description: 'Giảng dạy liên tục trong ngành Toán học',
   },
   {
     icon: '👥',

@@ -38,3 +38,17 @@ export interface CourseGroup {
   subject: string;
   courses: Course[];
 }
+
+export type UserRole = 'STUDENT' | 'TEACHER' | 'ADMIN';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  avatarUrl?: string | null;
+  phone?: string | null;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}

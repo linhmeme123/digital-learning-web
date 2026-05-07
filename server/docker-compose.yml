@@ -1,0 +1,18 @@
+name: lop_hoc_so
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: lop_hoc_so_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: lophocso
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: lop_hoc_so_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - lop_hoc_so_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  lop_hoc_so_postgres_data:

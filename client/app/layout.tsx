@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AuthProvider } from '@/hooks/auth-context'
 import './globals.css'
 
 const geist = Geist({ 
@@ -43,8 +44,10 @@ export default function RootLayout({
   return (
     <html lang="vi" className={`${geist.variable} ${geistMono.variable} bg-gradient-to-br from-slate-50 to-slate-100`}>
       <body className="font-sans antialiased bg-gradient-to-br from-slate-50 to-slate-100">
-        {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        <AuthProvider>
+          {children}
+          {process.env.NODE_ENV === 'production' && <Analytics />}
+        </AuthProvider>
       </body>
     </html>
   )

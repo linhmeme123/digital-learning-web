@@ -28,9 +28,26 @@ pnpm dev
 ```bash
 cd server
 pnpm install
-pnpm dev
+pnpm dev -> test thunder client 
 ```
 
 ## Next Steps
 - You can now start building your API routes in `server/src/index.js`.
 - Update the frontend API calls in `client` to point to `http://localhost:4000`.
+
+## Init Database 
+```bash
+cd server
+docker compose up -d #chạy docker
+docker ps # kiêm tra container 
+pnpm exec prisma migrate dev --name init_auth #migrate
+pnpm exec prisma generate 
+pnpm exec prisma studio #xem database, có thể edit 
+```
+
+## Create seed for easy testing 
+```bash
+pnpm exec prisma db seed
+```
+
+
