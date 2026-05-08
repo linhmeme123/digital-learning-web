@@ -6,6 +6,8 @@ const env = require('./config/env');
 const authRoutes = require('./routes/auth.routes');
 const courseRoutes = require('./routes/course.routes');
 const teacherRoutes = require('./routes/teacher.routes');
+const homeRoutes = require('./routes/home.routes');
+const { requestLogger } = require('./utils/logger');
 
 const app = express();
 
@@ -18,6 +20,7 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(requestLogger);
 
 app.get('/', (req, res) => {
   res.json({
@@ -29,6 +32,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/teachers', teacherRoutes);
+app.use('/api/home', homeRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

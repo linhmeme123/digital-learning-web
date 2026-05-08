@@ -63,3 +63,19 @@ model Teacher {
 
   @@map("teachers")
 }
+
+model HomeContent {
+  id                Int      @id @default(1)
+  heroSlides        Json
+  introductionTitle String
+  introductionBody  Json
+  achievements      Json
+  mission           String
+  vision            String
+  coreValues        Json
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("home_contents")
+}

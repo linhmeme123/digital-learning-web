@@ -10,11 +10,27 @@ import RoomsTab from '@/components/RoomsTab'
 import ManagementTab from '@/components/ManagementTab'
 import Footer from '@/components/Footer'
 import { useAuth } from '@/hooks/auth-context'
+import { HomeContent, homeApi } from '@/lib/api'
 import { ShieldAlert, Construction, CalendarDays, FileText, UserCircle, BookOpen, DoorOpen, Users } from 'lucide-react'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('about')
+  const [homeContent, setHomeContent] = useState<HomeContent | null>(null)
+  const [homeError, setHomeError] = useState('')
   const { user, isAdmin, isTeacher, isStudent, isLoading } = useAuth()
+
+  useEffect(() => {
+    const loadHomeContent = async () => {
+      try {
+        const response = await homeApi.get()
+        setHomeContent(response.data.home)
+      } catch (err) {
+        setHomeError(err instanceof Error ? err.message : 'Không thể tải nội dung trang chủ')
+      }
+    }
+
+    loadHomeContent()
+  }, [])
 
   useEffect(() => {
     const guestTabs = ['about', 'teachers', 'rooms']
@@ -99,7 +115,12 @@ export default function Home() {
   const renderContent = () => {
     switch (activeTab) {
       case 'about':
-        return <AboutTab />
+        return (
+          <>
+            {homeError && <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">{homeError}</div>}
+            <AboutTab content={homeContent} onContentUpdated={setHomeContent} />
+          </>
+        )
       case 'courses':
         return renderPlaceholder('Danh sách Khoá học')
       case 'teachers':
@@ -140,7 +161,7 @@ export default function Home() {
           </div>
         )
       default:
-        return <AboutTab />
+        return <AboutTab content={homeContent} onContentUpdated={setHomeContent} />
     }
   }
 
@@ -160,7 +181,7 @@ export default function Home() {
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           {activeTab === 'about' && (
             <section className="w-full mb-12 md:mb-16">
-              <HeroCarousel />
+              {homeContent && <HeroCarousel slides={homeContent.heroSlides} />}
             </section>
           )}
 

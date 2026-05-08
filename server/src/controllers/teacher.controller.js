@@ -1,4 +1,5 @@
 const TeacherService = require('../services/teacher.service');
+const { logError } = require('../utils/logger');
 
 async function listTeachers(req, res) {
   try {
@@ -12,6 +13,7 @@ async function listTeachers(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'listTeachers failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi lấy danh sách giáo viên',
@@ -31,6 +33,7 @@ async function getTeacherById(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'getTeacherById failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi lấy thông tin giáo viên',
@@ -50,6 +53,7 @@ async function createTeacher(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'createTeacher failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi tạo giáo viên',
@@ -69,6 +73,7 @@ async function updateTeacher(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'updateTeacher failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi cập nhật giáo viên',
@@ -85,6 +90,7 @@ async function deleteTeacher(req, res) {
       message: 'Xóa giáo viên thành công',
     });
   } catch (error) {
+    logError(req, error, 'deleteTeacher failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi xóa giáo viên',

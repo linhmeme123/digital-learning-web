@@ -1,4 +1,5 @@
 const CourseService = require('../services/course.service');
+const { logError } = require('../utils/logger');
 
 async function listCourses(req, res) {
   try {
@@ -12,6 +13,7 @@ async function listCourses(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'listCourses failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi lấy danh sách khóa học',
@@ -31,6 +33,7 @@ async function getCourseById(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'getCourseById failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi lấy thông tin khóa học',
@@ -50,6 +53,7 @@ async function createCourse(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'createCourse failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi tạo khóa học',
@@ -69,6 +73,7 @@ async function updateCourse(req, res) {
       },
     });
   } catch (error) {
+    logError(req, error, 'updateCourse failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi cập nhật khóa học',
@@ -85,6 +90,7 @@ async function deleteCourse(req, res) {
       message: 'Xóa khóa học thành công',
     });
   } catch (error) {
+    logError(req, error, 'deleteCourse failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi xóa khóa học',

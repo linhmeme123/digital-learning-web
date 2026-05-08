@@ -1,84 +1,132 @@
 'use client'
 
-import { achievements } from '@/lib/mock-data'
+import { useState } from 'react'
+import { Edit2, Loader2, X } from 'lucide-react'
+import { HomeContent, homeApi } from '@/lib/api'
+import { useAuth } from '@/hooks/auth-context'
 
-export default function AboutTab() {
+type AboutTabProps = {
+  content: HomeContent | null
+  onContentUpdated: (content: HomeContent) => void
+}
+
+export default function AboutTab({ content, onContentUpdated }: AboutTabProps) {
+  const { isAdmin } = useAuth()
+  const [isEditing, setIsEditing] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [form, setForm] = useState('')
+
+  if (!content) {
+    return (
+      <div className="rounded-2xl border border-purple-100 bg-white py-16 text-center text-purple-600">
+        <Loader2 className="mx-auto animate-spin" size={28} />
+      </div>
+    )
+  }
+
+  const openEditor = () => {
+    setForm(JSON.stringify(content, null, 2))
+    setError('')
+    setIsEditing(true)
+  }
+
+  const handleSave = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setIsSaving(true)
+    setError('')
+
+    try {
+      const payload = JSON.parse(form)
+      const response = await homeApi.update(payload)
+      onContentUpdated(response.data.home)
+      setIsEditing(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Nội dung JSON chưa hợp lệ hoặc không thể lưu')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   return (
     <div className="space-y-12">
-      {/* Introduction */}
+      {isAdmin && (
+        <div className="flex justify-end">
+          <button onClick={openEditor} className="inline-flex items-center gap-2 rounded-xl bg-purple-50 px-4 py-2 font-bold text-purple-600 hover:bg-purple-100">
+            <Edit2 size={16} />
+            Chỉnh sửa trang chủ
+          </button>
+        </div>
+      )}
+
       <div className="bg-white rounded-lg p-8 shadow-sm">
-        <h2 className="text-3xl font-bold text-gray-900 mb-4">Về Lớp Học Số</h2>
-        <p className="text-lg text-gray-600 leading-relaxed mb-4">
-          Lớp Học Số là một trung tâm giáo dục chuyên về công nghệ thông tin, lập trình, và phát triển phần mềm. 
-          Chúng tôi cam kết cung cấp giáo dục chất lượng cao với các khóa học được thiết kế bởi các chuyên gia trong ngành.
-        </p>
-        <p className="text-lg text-gray-600 leading-relaxed">
-          Với đội ngũ giáo viên có kinh nghiệm và phương pháp giảng dạy hiện đại, chúng tôi giúp học viên không chỉ 
-          nắm vững kiến thức lý thuyết mà còn phát triển kỹ năng thực hành cần thiết cho sự nghiệp.
-        </p>
+        <h2 className="text-3xl font-bold text-gray-900 mb-4">{content.introductionTitle}</h2>
+        {content.introductionBody.map((paragraph) => (
+          <p key={paragraph} className="text-lg text-gray-600 leading-relaxed mb-4">
+            {paragraph}
+          </p>
+        ))}
       </div>
 
-      {/* Achievements Grid */}
       <div>
         <h3 className="text-2xl font-bold text-gray-900 mb-8">Những Thành Tích</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {achievements.map((achievement, index) => (
-            <div
-              key={index}
-              className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-100 hover:shadow-lg transition-shadow"
-            >
+          {content.achievements.map((achievement) => (
+            <div key={achievement.title} className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-100 hover:shadow-lg transition-shadow">
               <div className="text-4xl mb-3">{achievement.icon}</div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">
-                {achievement.title}
-              </h4>
-              <p className="text-gray-600">
-                {achievement.description}
-              </p>
+              <h4 className="text-xl font-bold text-gray-900 mb-2">{achievement.title}</h4>
+              <p className="text-gray-600">{achievement.description}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Mission & Vision */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-lg p-8 shadow-sm border-l-4 border-purple-600">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Sứ Mệnh</h3>
-          <p className="text-gray-600 leading-relaxed">
-            Trang bị cho học viên những kỹ năng lập trình và kiến thức công nghệ cần thiết để thành công 
-            trong sự nghiệp ngành công nghệ thông tin.
-          </p>
+          <p className="text-gray-600 leading-relaxed">{content.mission}</p>
         </div>
         <div className="bg-white rounded-lg p-8 shadow-sm border-l-4 border-pink-600">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Tầm Nhìn</h3>
-          <p className="text-gray-600 leading-relaxed">
-            Trở thành một trong những trung tâm giáo dục công nghệ hàng đầu, nơi sinh viên có thể phát triển 
-            toàn diện và chuẩn bị tốt nhất cho tương lai.
-          </p>
+          <p className="text-gray-600 leading-relaxed">{content.vision}</p>
         </div>
       </div>
 
-      {/* Core Values */}
       <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg p-8 text-white">
         <h3 className="text-2xl font-bold mb-6">Giá Trị Cốt Lõi</h3>
         <ul className="space-y-3">
-          <li className="flex items-start gap-3">
-            <span className="text-xl">✓</span>
-            <span><strong>Chất Lượng:</strong> Đảm bảo chất lượng giáo dục cao nhất</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-xl">✓</span>
-            <span><strong>Sáng Tạo:</strong> Khuyến khích sự sáng tạo và đổi mới</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-xl">✓</span>
-            <span><strong>Cộng Tác:</strong> Hợp tác với các học viên để đạt mục tiêu chung</span>
-          </li>
-          <li className="flex items-start gap-3">
-            <span className="text-xl">✓</span>
-            <span><strong>Tiên Phong:</strong> Luôn theo dõi và áp dụng công nghệ mới nhất</span>
-          </li>
+          {content.coreValues.map((value) => (
+            <li key={value.title} className="flex items-start gap-3">
+              <span className="text-xl">✓</span>
+              <span><strong>{value.title}:</strong> {value.description}</span>
+            </li>
+          ))}
         </ul>
       </div>
+
+      {isEditing && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <form onSubmit={handleSave} className="w-full max-w-4xl rounded-2xl bg-white shadow-2xl border border-purple-100 overflow-hidden">
+            <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-purple-50 to-pink-50 p-6">
+              <h3 className="text-xl font-bold text-gray-900">Chỉnh sửa nội dung trang chủ</h3>
+              <button type="button" onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-gray-600">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              {error && <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-600">{error}</div>}
+              <textarea value={form} onChange={(event) => setForm(event.target.value)} rows={22} className="w-full rounded-xl border border-gray-200 p-4 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-purple-500" />
+              <div className="mt-4 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsEditing(false)} className="rounded-xl border border-gray-200 px-5 py-2.5 font-bold text-gray-600 hover:bg-gray-50">Hủy</button>
+                <button type="submit" disabled={isSaving} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-2.5 font-bold text-white disabled:opacity-70">
+                  {isSaving && <Loader2 size={18} className="animate-spin" />}
+                  Lưu
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      )}
     </div>
   )
 }

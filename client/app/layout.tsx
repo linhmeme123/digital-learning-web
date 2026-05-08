@@ -42,8 +42,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi" className={`${geist.variable} ${geistMono.variable} bg-gradient-to-br from-slate-50 to-slate-100`}>
-      <body className="font-sans antialiased bg-gradient-to-br from-slate-50 to-slate-100">
+    <html lang="vi" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} bg-gradient-to-br from-slate-50 to-slate-100`}>
+      <body suppressHydrationWarning className="font-sans antialiased bg-gradient-to-br from-slate-50 to-slate-100">
         <AuthProvider>
           {children}
           {process.env.NODE_ENV === 'production' && <Analytics />}

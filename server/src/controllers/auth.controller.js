@@ -1,4 +1,5 @@
 const AuthService = require('../services/auth.service');
+const { logError } = require('../utils/logger');
 
 const TOKEN_COOKIE_NAME = 'access_token';
 
@@ -23,6 +24,7 @@ async function signup(req, res) {
       data: result,
     });
   } catch (error) {
+    logError(req, error, 'signup failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi đăng ký',
@@ -42,6 +44,7 @@ async function login(req, res) {
       data: result,
     });
   } catch (error) {
+    logError(req, error, 'login failed');
     return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || 'Lỗi server khi đăng nhập',

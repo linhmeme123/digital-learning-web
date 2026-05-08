@@ -2,7 +2,7 @@ CREATE TABLE "teachers" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "subject" TEXT NOT NULL,
-    "achievements" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
+    "achievements" TEXT[] NOT NULL,
     "image" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "quote" TEXT NOT NULL,
