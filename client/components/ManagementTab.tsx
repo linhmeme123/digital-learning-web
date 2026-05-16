@@ -5,6 +5,18 @@ import { Plus, Search, Edit2, Trash2, BookOpen, Clock, GraduationCap, ChevronRig
 import { coursesApi } from '@/lib/api'
 import { Course } from '@/lib/types'
 
+const demoPayments = [
+  { name: 'Nguyễn Minh Anh', className: 'Python Cơ Bản', amount: '1.200.000đ', status: 'Đã thu' },
+  { name: 'Trần Gia Bảo', className: 'JavaScript & React', amount: '1.800.000đ', status: 'Còn nợ' },
+  { name: 'Phạm Hà My', className: 'SQL Cơ Bản', amount: '900.000đ', status: 'Đã thu' },
+]
+
+const demoRoomFees = [
+  { room: 'Phòng A101', shift: 'Thứ 2, 4, 6 - 19:00', amount: '450.000đ/tuần', status: 'Đã thanh toán' },
+  { room: 'Phòng B203', shift: 'Thứ 3, 5 - 20:00', amount: '300.000đ/tuần', status: 'Chờ thu' },
+  { room: 'Phòng Online', shift: 'Thứ 7 - 09:00', amount: '0đ', status: 'Miễn phí' },
+]
+
 export default function ManagementTab() {
   const [classList, setClassList] = useState<Course[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -91,8 +103,19 @@ export default function ManagementTab() {
               Tạo phiếu thu
             </button>
           </div>
-          <div className="p-6 text-sm font-medium text-gray-500">
-            Chưa có API học phí. Khu vực này sẽ hiển thị dữ liệu thật khi backend bổ sung endpoint payments.
+          <div className="divide-y divide-gray-100">
+            {demoPayments.map((item) => (
+              <div key={`${item.name}-${item.className}`} className="p-4 flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-bold text-gray-900">{item.name}</p>
+                  <p className="text-xs text-gray-500">{item.className}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-black text-gray-900">{item.amount}</p>
+                  <span className={`text-xs font-bold ${item.status === 'Đã thu' ? 'text-green-600' : 'text-red-600'}`}>{item.status}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -109,8 +132,19 @@ export default function ManagementTab() {
               Ghi nhận chi phí
             </button>
           </div>
-          <div className="p-6 text-sm font-medium text-gray-500">
-            Chưa có API thuê phòng. Khu vực này sẽ hiển thị dữ liệu thật khi backend bổ sung endpoint rooms hoặc room bookings.
+          <div className="divide-y divide-gray-100">
+            {demoRoomFees.map((item) => (
+              <div key={`${item.room}-${item.shift}`} className="p-4 flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-bold text-gray-900">{item.room}</p>
+                  <p className="text-xs text-gray-500">{item.shift}</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-black text-gray-900">{item.amount}</p>
+                  <span className="text-xs font-bold text-pink-600">{item.status}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -118,8 +152,8 @@ export default function ManagementTab() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
           { label: 'Tổng số lớp', value: classList.length, icon: BookOpen, color: 'text-blue-600', bg: 'bg-blue-50' },
-          { label: 'Học phí tháng', value: 'Chưa có API', icon: Receipt, color: 'text-purple-600', bg: 'bg-purple-50' },
-          { label: 'Tiền phòng tuần', value: 'Chưa có API', icon: Clock, color: 'text-pink-600', bg: 'bg-pink-50' },
+          { label: 'Học phí tháng', value: '3.9M', icon: Receipt, color: 'text-purple-600', bg: 'bg-purple-50' },
+          { label: 'Tiền phòng tuần', value: '750K', icon: Clock, color: 'text-pink-600', bg: 'bg-pink-50' },
         ].map((stat, idx) => (
           <div key={idx} className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm flex items-center gap-4">
             <div className={`p-4 ${stat.bg} ${stat.color} rounded-2xl`}>
