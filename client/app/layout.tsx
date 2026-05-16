@@ -1,17 +1,7 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { AuthProvider } from '@/hooks/auth-context'
 import './globals.css'
-
-const geist = Geist({ 
-  variable: '--font-geist-sans',
-  subsets: ["latin"] 
-});
-const geistMono = Geist_Mono({ 
-  variable: '--font-geist-mono',
-  subsets: ["latin"] 
-});
 
 export const metadata: Metadata = {
   title: 'Lớp Học Số - Trung Tâm Giáo Dục Công Nghệ',
@@ -42,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi" suppressHydrationWarning className={`${geist.variable} ${geistMono.variable} bg-gradient-to-br from-slate-50 to-slate-100`}>
+    <html lang="vi" suppressHydrationWarning className="bg-gradient-to-br from-slate-50 to-slate-100">
       <body suppressHydrationWarning className="font-sans antialiased bg-gradient-to-br from-slate-50 to-slate-100">
         <AuthProvider>
           {children}

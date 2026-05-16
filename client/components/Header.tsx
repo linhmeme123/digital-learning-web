@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import type { ElementType } from 'react'
-import { Menu, LogIn, X, LogOut, User as UserIcon, ShieldCheck, GraduationCap, DoorOpen } from 'lucide-react'
+import { Menu, LogIn, X, LogOut, User as UserIcon, ShieldCheck } from 'lucide-react'
 import LoginModal from './LoginModal'
 import { useAuth } from '@/hooks/auth-context'
 
@@ -19,18 +19,15 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
   const menuItems: Array<{ id: string; label: string; icon?: ElementType }> = [
     { id: 'about', label: 'Giới thiệu' },
     { id: 'teachers', label: 'Giáo viên' },
-    { id: 'rooms', label: 'Khóa học' },
+    { id: 'rooms', label: 'Lớp học' },
   ]
 
   if (isAdmin) {
     menuItems.push({ id: 'management', label: 'Quản lý', icon: ShieldCheck })
     menuItems.push({ id: 'account', label: 'Tài khoản', icon: UserIcon })
   } else if (isTeacher) {
-    menuItems.push({ id: 'teachingClasses', label: 'Lớp tôi dạy', icon: GraduationCap })
-    menuItems.push({ id: 'teachingRooms', label: 'Phòng dạy', icon: DoorOpen })
     menuItems.push({ id: 'account', label: 'Tài khoản', icon: UserIcon })
   } else if (isStudent) {
-    menuItems.push({ id: 'myClasses', label: 'Lớp của tôi', icon: GraduationCap })
     menuItems.push({ id: 'account', label: 'Tài khoản', icon: UserIcon })
   }
 
@@ -39,7 +36,7 @@ export default function Header({ activeTab, onTabChange }: HeaderProps) {
     setIsMobileMenuOpen(false)
   }
 
-  const roleLabel = user?.role === 'ADMIN' ? 'Admin' : user?.role === 'TEACHER' ? 'Teacher' : 'Student'
+  const roleLabel = user?.role === 'ADMIN' ? 'Admin' : user?.role === 'TEACHER' ? 'Giáo viên' : 'Học sinh/Phụ huynh'
 
   return (
     <>

@@ -10,18 +10,6 @@ const defaultHomeContent = {
       description: 'Khóa học tư duy nền tảng từ cơ bản đến nâng cao',
       image: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
     },
-    {
-      id: 2,
-      title: 'Môn Vật Lý',
-      description: 'Hiểu bản chất hiện tượng và luyện giải bài tập theo chủ đề',
-      image: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    },
-    {
-      id: 3,
-      title: 'Môn Hoá Học',
-      description: 'Nắm chắc lý thuyết, phản ứng và phương pháp giải nhanh',
-      image: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    },
   ],
   introductionTitle: 'Về Lớp Học Số',
   introductionBody: [

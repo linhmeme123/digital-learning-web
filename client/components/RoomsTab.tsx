@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { BookOpen, Clock, Edit2, Loader2, Plus, Trash2, Users, X } from 'lucide-react'
+import { BookOpen, Clock, Edit2, FileText, Loader2, Lock, Plus, Trash2, Upload, Users, X } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { coursesApi } from '@/lib/api'
 import { Course } from '@/lib/types'
@@ -21,7 +21,7 @@ const emptyForm: CourseFormState = {
 }
 
 export default function RoomsTab() {
-  const { isAdmin } = useAuth()
+  const { user, isAdmin, isTeacher, isStudent } = useAuth()
   const [courses, setCourses] = useState<Course[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
@@ -30,8 +30,24 @@ export default function RoomsTab() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [form, setForm] = useState<CourseFormState>(emptyForm)
 
+  const visibleCourses = useMemo(() => {
+    if (isAdmin || !user) {
+      return courses
+    }
+
+    if (isTeacher) {
+      return courses.filter((course) => [1, 4, 7, 9].includes(course.id))
+    }
+
+    if (isStudent) {
+      return courses.filter((course) => [1, 2, 5].includes(course.id))
+    }
+
+    return courses
+  }, [courses, isAdmin, isStudent, isTeacher, user])
+
   const groupedCourses = useMemo(() => {
-    return courses.reduce((acc, course) => {
+    return visibleCourses.reduce((acc, course) => {
       const existing = acc.find((group) => group.subject === course.subject)
       if (existing) {
         existing.courses.push(course)
@@ -40,7 +56,7 @@ export default function RoomsTab() {
       }
       return acc
     }, [] as Array<{ subject: string; courses: Course[] }>)
-  }, [courses])
+  }, [visibleCourses])
 
   const loadCourses = async () => {
     setError('')
@@ -139,13 +155,29 @@ export default function RoomsTab() {
     }
   }
 
+  const pageTitle = isAdmin
+    ? 'Quản lý lớp học'
+    : isTeacher
+      ? 'Lớp tôi dạy'
+      : isStudent
+        ? 'Lớp học của học sinh'
+        : 'Lớp học'
+
+  const pageDescription = isAdmin
+    ? 'Admin có thể thêm, chỉnh sửa và xóa lớp học trên hệ thống.'
+    : isTeacher
+      ? 'Giáo viên xem các lớp được phân công và chỉnh sửa tài liệu học tập.'
+      : isStudent
+        ? 'Học sinh/phụ huynh xem các lớp đang theo học và tài liệu của lớp.'
+        : 'Khách có thể xem toàn bộ lớp học công khai, nhưng cần đăng nhập để xem tài liệu.'
+
   return (
     <div className="space-y-12">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Khóa học</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">{pageTitle}</h2>
           <p className="text-gray-600">
-            Danh sách các khóa học, lớp học và lịch trình chi tiết
+            {pageDescription}
           </p>
         </div>
 
@@ -170,7 +202,7 @@ export default function RoomsTab() {
         <div className="flex items-center justify-center rounded-2xl border border-purple-100 bg-white py-16 text-purple-600">
           <Loader2 className="animate-spin" size={28} />
         </div>
-      ) : courses.length === 0 ? (
+      ) : visibleCourses.length === 0 ? (
         <div className="rounded-2xl border border-purple-100 bg-white py-16 text-center">
           <p className="text-lg font-bold text-gray-900">Chưa có khóa học nào</p>
           <p className="mt-2 text-sm text-gray-500">Admin có thể thêm khóa học mới tại đây.</p>
@@ -206,9 +238,9 @@ export default function RoomsTab() {
                               <h4 className="text-lg font-bold text-gray-900">
                                 {course.name}
                               </h4>
-                              <p className="text-sm text-gray-600">
-                                Lớp: {course.class}
-                              </p>
+                              <p className="text-sm text-gray-600">Lớp: {course.class}</p>
+                              {isTeacher && <p className="text-xs font-semibold text-purple-600 mt-1">Bạn đang phụ trách lớp này</p>}
+                              {isStudent && <p className="text-xs font-semibold text-purple-600 mt-1">Đang theo học</p>}
                             </div>
                           </div>
 
@@ -233,9 +265,14 @@ export default function RoomsTab() {
                                   Xóa
                                 </button>
                               </>
+                            ) : !user ? (
+                              <span className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-500 rounded font-bold text-sm">
+                                <Lock size={14} />
+                                Tài liệu khóa
+                              </span>
                             ) : (
                               <button className="px-4 py-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded font-medium text-sm hover:shadow-lg transition-shadow whitespace-nowrap">
-                                Đăng ký
+                                Vào lớp
                               </button>
                             )}
                           </div>
@@ -259,6 +296,8 @@ export default function RoomsTab() {
                             </div>
                           </div>
                         </div>
+
+                        <ClassDocuments course={course} isGuest={!user} isTeacher={isTeacher} isStudent={isStudent} />
                       </div>
                     </div>
                   ))}
@@ -279,7 +318,7 @@ export default function RoomsTab() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {courses.map((course) => (
+                {visibleCourses.map((course) => (
                   <tr key={course.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">{course.subject}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{course.class}</td>
@@ -301,9 +340,11 @@ export default function RoomsTab() {
                             Xóa
                           </button>
                         </div>
+                      ) : !user ? (
+                        <span className="text-gray-400 font-medium text-sm">Không có quyền xem tài liệu</span>
                       ) : (
                         <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
-                          Đăng ký
+                          Vào lớp
                         </button>
                       )}
                     </td>
@@ -369,6 +410,78 @@ export default function RoomsTab() {
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+function ClassDocuments({
+  course,
+  isGuest,
+  isTeacher,
+  isStudent,
+}: {
+  course: Course
+  isGuest: boolean
+  isTeacher: boolean
+  isStudent: boolean
+}) {
+  const documents = [
+    `Giáo án ${course.name}`,
+    `Bài tập tuần ${course.classNumber}`,
+    `Tài liệu ôn tập ${course.level}`,
+  ]
+
+  if (isGuest) {
+    return (
+      <div className="mt-5 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-4">
+        <div className="flex items-center gap-3 text-gray-500">
+          <Lock size={18} />
+          <p className="text-sm font-semibold">Khách chỉ xem thông tin lớp học. Đăng nhập để xem tài liệu.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-5 rounded-xl border border-purple-100 bg-purple-50/40 p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="text-sm font-bold uppercase tracking-wider text-purple-700">Tài liệu lớp học</p>
+          <p className="text-xs text-gray-500">
+            {isTeacher ? 'Giáo viên có thể cập nhật tài liệu như một lớp Teams.' : 'Tài liệu chỉ hiển thị với thành viên của lớp.'}
+          </p>
+        </div>
+        {isTeacher && (
+          <button className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold text-purple-600 shadow-sm hover:bg-purple-100">
+            <Upload size={15} />
+            Thêm tài liệu
+          </button>
+        )}
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+        {documents.map((document) => (
+          <div key={document} className="rounded-lg bg-white p-3 shadow-sm border border-purple-100">
+            <div className="flex items-start gap-2">
+              <FileText size={18} className="mt-0.5 shrink-0 text-purple-600" />
+              <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-gray-900">{document}</p>
+                <p className="text-xs text-gray-500">PDF • cập nhật gần đây</p>
+              </div>
+            </div>
+            {isTeacher && (
+              <button className="mt-3 text-xs font-bold text-blue-600 hover:text-blue-700">
+                Sửa tài liệu
+              </button>
+            )}
+            {isStudent && (
+              <button className="mt-3 text-xs font-bold text-purple-600 hover:text-purple-700">
+                Xem tài liệu
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
