@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { BookOpen, Clock, Edit2, FileText, Loader2, Lock, Plus, Trash2, Upload, Users, X } from 'lucide-react'
+import { BookOpen, Clock, Edit2, ExternalLink, FileText, Loader2, Lock, Plus, Trash2, Upload, Users, X } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { coursesApi } from '@/lib/api'
 import { Course } from '@/lib/types'
@@ -19,6 +19,8 @@ const emptyForm: CourseFormState = {
   subject: '',
   classNumber: 1,
 }
+
+const REGISTRATION_FORM_URL = 'https://forms.gle/Qbyyp5VYZQ6dzyKF7'
 
 export default function RoomsTab() {
   const { user, isAdmin, isTeacher, isStudent } = useAuth()
@@ -48,11 +50,12 @@ export default function RoomsTab() {
 
   const groupedCourses = useMemo(() => {
     return visibleCourses.reduce((acc, course) => {
-      const existing = acc.find((group) => group.subject === course.subject)
+      const subject = course.subject || 'Toán'
+      const existing = acc.find((group) => group.subject === subject)
       if (existing) {
         existing.courses.push(course)
       } else {
-        acc.push({ subject: course.subject, courses: [course] })
+        acc.push({ subject, courses: [course] })
       }
       return acc
     }, [] as Array<{ subject: string; courses: Course[] }>)
@@ -248,6 +251,7 @@ export default function RoomsTab() {
                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getLevelColor(course.level)}`}>
                               {course.level}
                             </span>
+                            <RegistrationButton compact />
                             {isAdmin ? (
                               <>
                                 <button
@@ -280,8 +284,8 @@ export default function RoomsTab() {
 
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
                           <CourseMeta icon={Clock} label="Lịch học" value={course.schedule} color="purple" />
-                          <CourseMeta icon={BookOpen} label="Thời lượng" value={course.duration} color="pink" />
-                          <CourseMeta icon={Users} label="Sức chứa" value={`Tối đa ${course.capacity} học viên`} color="green" />
+                          <CourseMeta icon={BookOpen} label="Thời lượng" value={course.duration || '1.5 giờ/buổi'} color="pink" />
+                          <CourseMeta icon={Users} label="Sức chứa" value={`Tối đa ${course.capacity || 20} học sinh`} color="green" />
                           <div className="flex items-start gap-3">
                             <div className="p-2 bg-indigo-100 rounded-lg flex-shrink-0">
                               <div className="w-5 h-5 rounded-full bg-indigo-600" />
@@ -306,53 +310,6 @@ export default function RoomsTab() {
             ))}
           </div>
 
-          <div className="hidden lg:block mt-12 bg-white rounded-lg shadow-sm overflow-hidden border border-purple-100">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-purple-100 to-pink-100">
-                <tr>
-                  {['Môn học', 'Lớp', 'Mức độ', 'Lịch học', 'Thời lượng', 'Sức chứa', 'Hành động'].map((heading) => (
-                    <th key={heading} className={`px-6 py-3 text-sm font-bold text-gray-900 ${heading === 'Hành động' ? 'text-right' : 'text-left'}`}>
-                      {heading}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {visibleCourses.map((course) => (
-                  <tr key={course.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{course.subject}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{course.class}</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className={`px-2 py-1 rounded text-xs font-semibold ${getLevelColor(course.level)}`}>
-                        {course.level}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{course.schedule}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{course.duration}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{course.capacity} học viên</td>
-                    <td className="px-6 py-4 text-right">
-                      {isAdmin ? (
-                        <div className="flex justify-end gap-2">
-                          <button onClick={() => openEditForm(course)} className="text-blue-600 hover:text-blue-700 font-bold text-sm">
-                            Sửa
-                          </button>
-                          <button onClick={() => handleDelete(course)} className="text-red-600 hover:text-red-700 font-bold text-sm">
-                            Xóa
-                          </button>
-                        </div>
-                      ) : !user ? (
-                        <span className="text-gray-400 font-medium text-sm">Không có quyền xem tài liệu</span>
-                      ) : (
-                        <button className="text-purple-600 hover:text-purple-700 font-medium text-sm">
-                          Vào lớp
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
         </>
       )}
 
@@ -414,6 +371,24 @@ export default function RoomsTab() {
   )
 }
 
+function RegistrationButton({ compact = false }: { compact?: boolean }) {
+  return (
+    <a
+      href={REGISTRATION_FORM_URL}
+      target="_blank"
+      rel="noreferrer"
+      className={`inline-flex items-center justify-center gap-1 rounded font-bold transition-colors ${
+        compact
+          ? 'px-3 py-1 bg-green-50 text-green-700 text-sm hover:bg-green-100'
+          : 'text-green-700 hover:text-green-800 text-sm'
+      }`}
+    >
+      Đăng ký
+      <ExternalLink size={compact ? 13 : 14} />
+    </a>
+  )
+}
+
 function ClassDocuments({
   course,
   isGuest,
@@ -436,7 +411,7 @@ function ClassDocuments({
       <div className="mt-5 rounded-xl border border-dashed border-gray-200 bg-gray-50 p-4">
         <div className="flex items-center gap-3 text-gray-500">
           <Lock size={18} />
-          <p className="text-sm font-semibold">Khách chỉ xem thông tin lớp học. Đăng nhập để xem tài liệu.</p>
+          <p className="text-sm font-semibold">Đăng nhập để xem tài liệu.</p>
         </div>
       </div>
     )

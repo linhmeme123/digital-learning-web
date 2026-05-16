@@ -197,8 +197,27 @@ let mockUsers: AuthUser[] = [
   },
 ];
 
-let mockCoursesState: ApiCourse[] = initialCourses.map((course) => ({
-  ...course,
+function normalizeCourse(course: Partial<ApiCourse> & { id: number; name: string }, index: number): ApiCourse {
+  const gradeMatch = course.name.match(/\d+/);
+  const gradeLabel = gradeMatch ? `Lớp ${gradeMatch[0]}` : `Lớp ${index + 1}`;
+
+  return {
+    id: course.id,
+    name: course.name,
+    level: course.level || "Cơ Bản và Nâng cao",
+    schedule: course.schedule || "Đang cập nhật",
+    class: course.class || gradeLabel,
+    duration: course.duration || "1.5 giờ/buổi",
+    capacity: course.capacity || 20,
+    subject: course.subject || "Toán",
+    classNumber: course.classNumber || index + 1,
+    createdAt: course.createdAt || now,
+    updatedAt: course.updatedAt || now,
+  };
+}
+
+let mockCoursesState: ApiCourse[] = initialCourses.map((course, index) => ({
+  ...normalizeCourse(course, index),
   createdAt: now,
   updatedAt: now,
 }));
@@ -218,35 +237,29 @@ let mockHomeState: HomeContent = {
     {
       id: 1,
       title: "Lớp Học Số",
-      description: "Không gian học tập hiện đại cho học viên, giáo viên và phụ huynh",
+      description: "Không gian học tập hiện đại cho học sinh, giáo viên và phụ huynh",
       image: "linear-gradient(135deg, #6d28d9 0%, #db2777 55%, #f59e0b 100%)",
     },
     {
       id: 2,
-      title: "Lớp học theo lộ trình",
-      description: "Theo dõi lớp, giáo viên, tài liệu và tiến độ học tập trong một giao diện duy nhất",
+      title: "Theo lộ trình",
+      description: "Theo dõi lớp, giáo viên, tài liệu và tiến độ học tập",
       image: "linear-gradient(135deg, #0f766e 0%, #2563eb 50%, #7c3aed 100%)",
-    },
-    {
-      id: 3,
-      title: "Sẵn sàng cho demo tuyển sinh",
-      description: "Giao diện nhanh, rõ ràng và có thể chia sẻ qua link hoặc QR ngay trên Vercel",
-      image: "linear-gradient(135deg, #be123c 0%, #ea580c 50%, #ca8a04 100%)",
     },
   ],
   introductionTitle: "Về Lớp Học Số",
   introductionBody: [
-    "Lớp Học Số giúp trung tâm giới thiệu lớp học, giáo viên và thông tin học tập một cách trực quan.",
-    "Phiên bản demo này dùng dữ liệu mẫu để có thể deploy nhanh lên Vercel, phù hợp cho quảng cáo và thu hút đăng ký ban đầu.",
+    "Lớp dạy kèm 1-1, dạy nhóm nhỏ",
+    "Sau mỗi buổi học sẽ có tài liệu và video để học sinh ôn lại",
   ],
   achievements,
   mission: "Kết nối học viên, giáo viên và phụ huynh trong một trải nghiệm học tập dễ tiếp cận.",
   vision: "Trở thành nền tảng giới thiệu và quản lý lớp học linh hoạt cho các trung tâm giáo dục.",
   coreValues: [
-    { title: "Rõ ràng", description: "Thông tin lớp học và giáo viên được trình bày dễ hiểu" },
-    { title: "Nhanh gọn", description: "Triển khai demo nhanh để kiểm thử nhu cầu thị trường" },
-    { title: "Linh hoạt", description: "Có thể chuyển từ mock sang API thật khi backend sẵn sàng" },
-    { title: "Tin cậy", description: "Giao diện tập trung vào trải nghiệm đăng ký ban đầu" },
+    { title: "Rõ ràng", description: "Thông tin lớp học, tài liệu và giáo viên được công khai" },
+    { title: "Tâm huyết", description: "Giáo viên luôn dạy học với tâm huyết và trách nhiệm" },
+    { title: "Hiện đại", description: "Sử dụng các công nghệ dạy học mới và bài giảng mới nhất" },
+    { title: "Tin cậy", description: "Phụ huynh có thể theo dõi tiến độ học tập của con" },
   ],
   createdAt: now,
   updatedAt: now,

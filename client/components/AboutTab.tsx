@@ -68,30 +68,6 @@ export default function AboutTab({ content, onContentUpdated }: AboutTabProps) {
         ))}
       </div>
 
-      <div>
-        <h3 className="text-2xl font-bold text-gray-900 mb-8">Những Thành Tích</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {content.achievements.map((achievement) => (
-            <div key={achievement.title} className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-100 hover:shadow-lg transition-shadow">
-              <div className="text-4xl mb-3">{achievement.icon}</div>
-              <h4 className="text-xl font-bold text-gray-900 mb-2">{achievement.title}</h4>
-              <p className="text-gray-600">{achievement.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-8 shadow-sm border-l-4 border-purple-600">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Sứ Mệnh</h3>
-          <p className="text-gray-600 leading-relaxed">{content.mission}</p>
-        </div>
-        <div className="bg-white rounded-lg p-8 shadow-sm border-l-4 border-pink-600">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Tầm Nhìn</h3>
-          <p className="text-gray-600 leading-relaxed">{content.vision}</p>
-        </div>
-      </div>
-
       <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg p-8 text-white">
         <h3 className="text-2xl font-bold mb-6">Giá Trị Cốt Lõi</h3>
         <ul className="space-y-3">
