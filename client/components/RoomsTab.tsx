@@ -172,7 +172,7 @@ export default function RoomsTab() {
       ? 'Giáo viên xem các lớp được phân công và chỉnh sửa tài liệu học tập.'
       : isStudent
         ? 'Học sinh/phụ huynh xem các lớp đang theo học và tài liệu của lớp.'
-        : 'Khách có thể xem toàn bộ lớp học công khai, nhưng cần đăng nhập để xem tài liệu.'
+        : 'Đăng nhập để xem đầy đủ tài liệu.'
 
   return (
     <div className="space-y-12">

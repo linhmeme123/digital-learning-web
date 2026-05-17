@@ -85,13 +85,6 @@ export default function Footer() {
               >
                 <Facebook size={18} />
               </a>
-              <a
-                href="#"
-                className="flex h-[34px] w-[34px] items-center justify-center rounded-lg bg-gray-700 text-sm font-black hover:bg-purple-600 transition-colors"
-                aria-label="TikTok"
-              >
-                T
-              </a>
             </div>
           </div>
         </div>

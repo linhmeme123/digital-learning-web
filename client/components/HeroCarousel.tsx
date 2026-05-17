@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { HomeSlide } from '@/lib/api'
+
+const REGISTRATION_FORM_URL = 'https://forms.gle/Qbyyp5VYZQ6dzyKF7'
 
 export default function HeroCarousel({ slides }: { slides: HomeSlide[] }) {
   const [current, setCurrent] = useState(0)
@@ -47,9 +49,15 @@ export default function HeroCarousel({ slides }: { slides: HomeSlide[] }) {
         <div className="text-center space-y-4 max-w-2xl px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-balance">{item.title}</h2>
           <p className="text-lg md:text-xl text-gray-100">{item.description}</p>
-          <button className="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow">
+          <a
+            href={REGISTRATION_FORM_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg font-semibold hover:shadow-lg transition-shadow"
+          >
             Đăng ký ngay
-          </button>
+            <ExternalLink size={18} />
+          </a>
         </div>
       </div>
 
