@@ -166,6 +166,7 @@ export type HomeResponse = {
 
 const now = new Date().toISOString();
 const STORAGE_USER_KEY = "mock_current_user";
+const HERO_BACKGROUND_IMAGE = 'url("https://i.ibb.co/SDBR8k3h/2a-Obo-QXH7n-Qn-I5-CTALYz-KDIVOO6n6-Nmw-CKrwub-Xk.jpg") center / cover no-repeat';
 
 let mockUsers: AuthUser[] = [
   {
@@ -238,13 +239,13 @@ let mockHomeState: HomeContent = {
       id: 1,
       title: "Lớp Học Số",
       description: "Không gian học tập hiện đại cho học sinh, giáo viên và phụ huynh",
-      image: "linear-gradient(135deg, #6d28d9 0%, #db2777 55%, #f59e0b 100%)",
+      image: HERO_BACKGROUND_IMAGE,
     },
     {
       id: 2,
       title: "Theo lộ trình",
       description: "Theo dõi lớp, giáo viên, tài liệu và tiến độ học tập",
-      image: "linear-gradient(135deg, #0f766e 0%, #2563eb 50%, #7c3aed 100%)",
+      image: HERO_BACKGROUND_IMAGE,
     },
   ],
   introductionTitle: "Về Lớp Học Số",
