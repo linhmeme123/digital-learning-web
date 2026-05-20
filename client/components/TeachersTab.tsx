@@ -161,9 +161,9 @@ export default function TeachersTab() {
     <div className="space-y-12">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Đội Ngũ Giáo Viên</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Giáo Viên</h2>
           <p className="text-gray-600">
-            Các giáo viên, lời chia sẻ và những lớp học họ đang phụ trách
+            Giáo viên và lời chia sẻ
           </p>
         </div>
 

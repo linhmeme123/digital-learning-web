@@ -6,6 +6,21 @@ import { HomeSlide } from '@/lib/api'
 
 const REGISTRATION_FORM_URL = 'https://forms.gle/Qbyyp5VYZQ6dzyKF7'
 
+function getHeroBackground(image: string) {
+  const value = image.trim()
+  const isCssBackground =
+    value.startsWith('url(') ||
+    value.startsWith('linear-gradient(') ||
+    value.startsWith('radial-gradient(') ||
+    value.startsWith('conic-gradient(')
+
+  if (isCssBackground) {
+    return value
+  }
+
+  return `url("${value}") center / cover no-repeat`
+}
+
 export default function HeroCarousel({ slides }: { slides: HomeSlide[] }) {
   const [current, setCurrent] = useState(0)
   const [autoPlay, setAutoPlay] = useState(true)
@@ -44,8 +59,11 @@ export default function HeroCarousel({ slides }: { slides: HomeSlide[] }) {
       onMouseEnter={() => setAutoPlay(false)}
       onMouseLeave={() => setAutoPlay(true)}
     >
-      <div className="absolute inset-0 transition-all duration-500" style={{ background: item.image }} />
-      <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white">
+      <div
+        className="absolute inset-0 transition-all duration-500 brightness-125 saturate-110"
+        style={{ background: getHeroBackground(item.image) }}
+      />
+      <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center text-white">
         <div className="text-center space-y-4 max-w-2xl px-4">
           <h2 className="text-4xl md:text-5xl font-bold text-balance">{item.title}</h2>
           <p className="text-lg md:text-xl text-gray-100">{item.description}</p>

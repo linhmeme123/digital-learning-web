@@ -24,7 +24,7 @@ export const teachers: Teacher[] = [
     subject: 'Dạy Toán',
     achievements: ['Thạc sĩ chuyên ngành phương pháp Toán sơ cấp', 'Thành viên hội toán học Hà Nội', 'Giáo viên toán THPT Lê Quý Đôn-Đống Đa'],
     image: 'https://i.ibb.co/NgdbcF9m/Chat-GPT-Image-May-16-2026-10-37-02-PM.png',
-    description: 'Với 25 năm kinh nghiệm giảng dạy Toán học, luyện ôn thi THPT và bồi dưỡng học sinh giỏi ôn thi Olympic. Giáo viên Hằng đã có các chuyên đề báo cáo ở các hội thảo toán học về chương trình đổi mới của Bộ Giáo Dục.',
+    description: 'Với 25 năm kinh nghiệm giảng dạy Toán học, luyện ôn thi THPT và bồi dưỡng học sinh giỏi ôn thi Olympic, cô Hằng đã có các chuyên đề báo cáo ở các hội thảo toán học về chương trình đổi mới của Bộ Giáo Dục.',
     quote: 'Toán học không chỉ là con số, mà là cách để giải quyết các vấn đề thực tế một cách hiệu quả.',
     experience: '25 năm kinh nghiệm',
   },
