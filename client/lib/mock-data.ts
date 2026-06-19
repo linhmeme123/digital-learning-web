@@ -28,6 +28,29 @@ export const teachers: Teacher[] = [
     quote: 'Toán học không chỉ là con số, mà là cách để giải quyết các vấn đề thực tế một cách hiệu quả.',
     experience: '25 năm kinh nghiệm',
   },
+  {
+    id: 2,
+    name: 'Tên giáo viên mới',
+    subject: 'Môn giảng dạy',
+    achievements: ['Thành tích hoặc chứng chỉ 1', 'Thành tích hoặc chứng chỉ 2', 'Thành tích hoặc chứng chỉ 3'],
+    image: 'https://res.cloudinary.com/dnlbkamkg/image/upload/f_auto,q_auto/2aOboQea6E99o7PXST6ujCFsFhklnD7HVWdelF8i_wbe8tr.png',
+    description: 'Nhập phần giới thiệu ngắn về kinh nghiệm, phương pháp giảng dạy và thế mạnh của giáo viên tại đây.',
+    quote: 'Nhập câu nói hoặc phương châm giảng dạy của giáo viên tại đây.',
+    experience: 'Số năm kinh nghiệm',
+    courses: [
+      {
+        id: 999,
+        name: 'Tên lớp phụ trách',
+        level: 'Trình độ lớp học',
+        schedule: 'Lịch học',
+        class: 'Khối/Lớp',
+        duration: 'Thời lượng/buổi',
+        capacity: 20,
+        subject: 'Môn học',
+        classNumber: 0,
+      },
+    ],
+  },
 ];
 
 export const courses: Course[] = [

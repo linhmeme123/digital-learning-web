@@ -225,9 +225,12 @@ let mockCoursesState: ApiCourse[] = initialCourses.map((course, index) => ({
 
 let mockTeachersState: ApiTeacher[] = initialTeachers.map((teacher, index) => ({
   ...teacher,
-  courses: mockCoursesState.filter(
-    (course) => course.subject === teacher.subject || course.id % initialTeachers.length === index
-  ),
+  courses:
+    teacher.courses && teacher.courses.length > 0
+      ? teacher.courses.map((course, courseIndex) => normalizeCourse(course, courseIndex))
+      : mockCoursesState.filter(
+          (course) => course.subject === teacher.subject || course.id % initialTeachers.length === index
+        ),
   createdAt: now,
   updatedAt: now,
 }));
