@@ -151,7 +151,7 @@ export const teachers: Teacher[] = [
     description: 'Với 25 năm kinh nghiệm giảng dạy Toán học, luyện ôn thi THPT và bồi dưỡng học sinh giỏi ôn thi Olympic, cô Hằng đã có các chuyên đề báo cáo ở các hội thảo toán học về chương trình đổi mới của Bộ Giáo Dục.',
     quote: 'Toán học không chỉ là con số, mà là cách để giải quyết các vấn đề thực tế một cách hiệu quả.',
     experience: '25 năm kinh nghiệm',
-    courses: courses.filter((course) => course.id >= 1 && course.id <= 5),
+    courses: courses.filter((course) => course.id >= 1 && course.id <= 9),
   },
   {
     id: 2,
