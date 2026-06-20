@@ -74,6 +74,17 @@ export const courses: Course[] = [
     classNumber: 12,
   },
   {
+    id: 6,
+    name: 'Toán 6',
+    level: 'Đã học hết bài 12 chương 1',
+    schedule: 'Thứ 3, 4 - 15:30-19:00',
+    class: 'Lớp 6',
+    duration: '1.5 giờ/buổi',
+    capacity: 10,
+    subject: 'Toán',
+    classNumber: 6,
+  },
+  {
     id: 7,
     name: 'Toán 7',
     level: 'Đã học hết bài 12 chương 1',
